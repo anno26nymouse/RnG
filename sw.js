@@ -1,21 +1,24 @@
-self.addEventListener("install", e => {
+const CACHE_NAME = 'hunter-gen-v1';
+const ASSETS = [
+  './',
+  './index.html',
+  // Tambahkan path CSS/JS eksternal jika ada di file terpisah
+];
+
+// Install Service Worker
+self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open("rng-cache").then(cache => {
-      return cache.addAll([
-        "./",
-        "./index.html",
-        "./manifest.json",
-        "./icon-192.png",
-        "./icon-512.png"
-      ]);
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
     })
   );
 });
 
-self.addEventListener("fetch", e => {
+// Fetching Assets
+self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
     })
   );
 });

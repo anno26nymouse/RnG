@@ -1,19 +1,19 @@
 {
-  "name": "Generator Angka",
-  "short_name": "RNG",
-  "start_url": ".",
+  "name": "Number Hunter: Anchor Generator",
+  "short_name": "HunterGen",
+  "description": "Tactical Anchor-Based Number Generator",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF3E00",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

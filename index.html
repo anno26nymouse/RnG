@@ -1,321 +1,451 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
- <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Number Hunter | Anchor Gen</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="description" content="Generator angka acak dengan high entropy">
-    <title>High-Entropy Number Generator</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #10b981;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+<meta name="theme-color" content="#54cdff">
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet"/>
 
-        .container {
-            background-color: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+<style>
+*, *::before, *::after{ box-sizing:border-box; margin:0; padding:0; }
 
-        h2 {
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            color: var(--text-muted);
-        }
-
-        #number-display {
-            font-size: 5.5rem;
-            font-weight: 800;
-            margin: 1rem 0;
-            color: var(--accent-color);
-            text-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
-            min-height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-variant-numeric: tabular-nums;
-        }
-
-        button {
-            background-color: var(--accent-color);
-            color: #064e3b;
-            border: none;
-            padding: 1.2rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 1rem;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        button:hover {
-            filter: brightness(1.1);
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(1px);
-        }
-
-        .history-section {
-            margin-top: 2rem;
-            text-align: left;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 1.5rem;
-        }
-
-        .history-title {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        #history-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 0;
-            list-style: none;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            background: rgba(255,255,255,0.05);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-            border: 1px solid rgba(255,255,255,0.05);
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #history-list::-webkit-scrollbar { width: 4px; }
-        #history-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-  #splash {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: #0f172a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+:root{
+  --bg: #FFFFFF;
+  --bg-subtle: #F8F8F8;
+  --accent: #54cdff; /* Hunter Orange */
+  --accent-dim: #7abbcb;
+  --text-main: #54cdff;
+  --text-dim: black;
+  --border: #E0E0E0;
+  --border-dark: #54cdff;
+  --glow: 0 0 20px #7abbcb;
 }
 
-/* container */
-.splash-content {
-    text-align: center;
+#boot-sequence {
+  position: fixed; inset: 0; background: #000; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  color: #54cdff; font-family: 'Share Tech Mono', monospace;
 }
 
-/* LOGO SCALE + FADE */
-.logo {
-    width: 90px;
-    margin-bottom: 10px;
-    opacity: 0;
-    transform: scale(0.5);
-    animation: logoIn 0.8s ease forwards;
+.boot-content { width: 280px; text-align: center; position: relative; }
+
+.boot-logo { 
+  font-family: 'Bebas Neue'; font-size: 3rem; letter-spacing: 5px; 
+  margin-bottom: 10px; animation: glitch 0.2s infinite alternate;
 }
 
-/* TEXT RNG (style game) */
-.title {
-    color: #10b981;
-    font-size: 2rem;
-    letter-spacing: 6px;
-    opacity: 0;
-    transform: translateY(10px);
+.boot-bar { width: 100%; height: 2px; background:; margin: 15px 0; }
+.boot-progress { height: 100%; background: #54cdff; width: 0%; transition: width 0.1s linear; }
+
+#boot-status { font-size: 0.7rem; letter-spacing: 2px; }
+
+.scan-line {
+  position: absolute; width: 150%; height: 2px; background: rgba(255, 62, 0, 0.1);
+  top: 50%; left: -25%; box-shadow: 0 0 15px #54cdff;
+  animation: scan 1.5s ease-in-out infinite;
 }
 
-/* Animasi logo */
-@keyframes logoIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+@keyframes scan {
+  0% { transform: translateY(-100px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100px); opacity: 0; }
 }
 
-/* Animasi teks muncul (kayak Mobile Legends vibe) */
-.title.show {
-    animation: textReveal 0.8s ease forwards, glowPulse 1.5s ease infinite;
+@keyframes glitch {
+  0% { transform: skew(2deg); }
+  100% { transform: skew(-2deg); }
 }
 
-@keyframes textReveal {
-    from {
-        opacity: 0;
-        letter-spacing: 20px;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        letter-spacing: 6px;
-        transform: translateY(0);
-    }
+.boot-fade-out { opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+
+
+body{
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* Glow ala game */
-@keyframes glowPulse {
-    0% { text-shadow: 0 0 5px #10b981; }
-    50% { text-shadow: 0 0 20px #10b981, 0 0 40px #10b981; }
-    100% { text-shadow: 0 0 5px #10b981; }
+/* ── TACTICAL BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: 
+    radial-gradient(circle, #E0E0E0 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
 }
-    </style>
+
+body::after {
+  content: 'TARGETING SYSTEM ACTIVE';
+  position: fixed; bottom: 20px; left: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.3em;
+  color: var(--text-dim); opacity: 0.4;
+}
+
+/* ── CLOCK (Minimalist Hunter) ── */
+#clock-bar{ position:fixed; top:30px; left:30px; z-index:200; border-left: 3px solid var(--accent); padding-left: 15px; }
+#clock-time{ font-family:'Share Tech Mono',monospace; font-size:1.6rem; color:var(--text-main); font-weight: 700; line-height:1; }
+#clock-date{ font-size:15px; letter-spacing:.2em; color:var(--text-dim); text-transform:uppercase; margin-top: 5px; font-weight:800; }
+#clock-paused{ font-family:'Share Tech Mono',monospace; font-size:15px; color:red; font-weight: bold; margin-top: 5px; }
+
+/* ── REFRESH BTN ── */
+#refresh-btn{
+  position:fixed; bottom:30px; right:30px; z-index:500;
+  width:50px; height:50px; background:var(--text-main);
+  border:none; border-radius:4px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+#refresh-btn:hover{ background:var(--accent); transform: rotate(90deg); }
+#refresh-btn svg{ width:20px; height:20px; stroke: #FFF; fill:none; stroke-width:2.5; }
+
+/* ── WRAPPER ── */
+.wrapper{ position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; gap:40px; width:min(90%, 440px); }
+
+/* ── TITLE ── */
+.title{ text-align:center; position: relative; }
+.title::before{ content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 25px; letter-spacing: 0.5em; color: var(--accent); font-weight: 700; }
+#mainTitle{ font-family:'Bebas Neue',sans-serif; font-size:4.5rem; letter-spacing:0.05em; color:var(--text-main); line-height: 0.9; outline: none; }
+.title p{ letter-spacing:.4em; color:var(--text-dim); font-size:.75rem; text-transform:uppercase; margin-top: 10px; font-weight: 600; }
+
+/* ── INPUT BOX ── */
+.input-box{ 
+  width:100%; background:#FFF; 
+  border: 1px solid var(--border-dark); 
+  padding:40px 30px; display:flex; flex-direction:column; gap:20px;
+  box-shadow: 15px 15px 0px var(--accent-dim);
+}
+.input-box label{ letter-spacing:.15em; color:black; font-size:.8rem; font-weight: 1000; text-align: center; }
+.anchor-input{ 
+  width:100%; height:80px; background:var(--bg-subtle); 
+  border:2px solid var(--text-main); border-radius:0;
+  outline:none; color:var(--text-main); text-align:center; 
+  font-size:3rem; font-family:'Share Tech Mono',monospace; 
+  transition:.2s; 
+}
+.anchor-input:focus{ background: #FFF; border-color: var(--accent); }
+
+.start-btn, .gen-btn{ 
+  width:100%; border:none; cursor:pointer; height:60px; 
+  font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.2em; 
+  transition:.3s; border-radius: 0;
+}
+.start-btn{ background:var(--text-main); color:#FFF; }
+.start-btn:hover{ background:var(--accent); transform: translate(-4px, -4px); box-shadow: 4px 4px 0px var(--text-main); }
+
+/* ── GENERATOR ── */
+.generator{ display:none; flex-direction:column; align-items:center; gap:25px; width: 100%; }
+.card{ 
+  width:100%; height:280px; background:#FFF; 
+  border:2px solid var(--text-main); position:relative; 
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+/* Tactical Corners */
+.card::before, .card::after {
+    content: ''; position: absolute; width: 20px; height: 20px; border: 3px solid var(--accent);
+}
+.card::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+.card::after { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+.card-label{ font-size:.7rem; letter-spacing:.4em; text-transform:uppercase; color:var(--accent); font-weight: 700; margin-bottom: 10px;}
+.number{ font-family:'Share Tech Mono',monospace; font-size:8rem; color:var(--text-main); line-height: 1; }
+
+.info{ text-align:center; color:var(--text-dim); letter-spacing:.1em; font-size:.9rem; font-weight: 500; }
+.info b{ color:var(--accent); font-weight: 700; }
+
+.gen-btn{ background: transparent; border: 2px solid var(--text-main); color: var(--text-main); }
+.gen-btn:hover:not(:disabled){ background: var(--text-main); color: #FFF; }
+.gen-btn:disabled{ opacity: 0.1; cursor: not-allowed; }
+
+/* ── FORMULA BOX (Receipt Style) ── */
+.formula-box{ 
+  width:100%; height:100px; background:var(--bg-subtle); 
+  border-top: 1px dashed var(--border); border-bottom: 1px dashed var(--border);
+  overflow:hidden; position:relative; 
+}
+.formula-container{ padding: 15px; display:flex; flex-direction:column; gap:4px; }
+.formula-line{ font-family:'Share Tech Mono',monospace; color:var(--text-dim); font-size:.7rem; opacity: 0; }
+.formula-line.active{ animation: fadeInLine 0.3s forwards; }
+@keyframes fadeInLine { to { opacity: 1; } }
+
+/* ── RESULTS POPUP ── */
+#results-overlay{
+  position:fixed; inset:0; background:rgba(255,255,255,0.98);
+  z-index:2000; display:none; align-items:center; justify-content:center; padding:20px;
+}
+#results-overlay.show{ display:flex; animation: fadeIn 0.4s ease; }
+
+.result-card{
+  width:min(100%, 420px); background:#FFF; border: 4px solid var(--text-main);
+  padding: 0; box-shadow: 20px 20px 0px var(--accent-dim);
+}
+.rc-header{ padding: 30px; background: var(--text-main); color: #FFF; }
+.rc-title{ font-family:'Bebas Neue',sans-serif; font-size:3rem; line-height: 1; }
+.rc-anchor-num{ background: var(--accent); color: #FFF; padding: 2px 10px; font-family: 'Share Tech Mono'; margin-left: 10px;}
+
+.rc-body{ padding: 30px; }
+.rc-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.rc-num-cell{
+  aspect-ratio: 1; border: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.rc-num-val{ font-family: 'Share Tech Mono'; font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
+.rc-num-order{ font-size: 0.5rem; color: var(--text-dim); margin-bottom: 2px; }
+
+.rc-footer{ padding: 0 30px 30px; display: flex; flex-direction: column; gap: 10px; }
+.rc-copy-btn{
+  height: 55px; background: var(--accent); color: #FFF; border: none;
+  font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: 2px; cursor: pointer;
+}
+.rc-close-btn{
+  height: 45px; background: transparent; border: 1px solid var(--border);
+  font-family: 'Bebas Neue'; font-size: 1rem; cursor: pointer;
+}
+
+@keyframes flicker{ 0%{opacity:1;} 50%{opacity:0.3;} 100%{opacity:1;} }
+.card.rolling .number{ animation: flicker 0.1s infinite; color: var(--accent); }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
 </head>
 <body>
-  <div id="splash">
-  <div class="splash-content">
-    <img src="icon-192.png" class="logo">
-    <h1 class="title" id="rng-text">RNG</h1>
+  <!-- INTRO OVERLAY -->
+<div id="boot-sequence">
+  <div class="boot-content">
+    <div class="scan-line"></div>
+    <div class="boot-text">
+      <p id="boot-status">INITIALIZING SYSTEM...</p>
+      <div class="boot-bar"><div class="boot-progress"></div></div>
+    </div>
+    <h2 class="boot-logo">let's fishing</h2>
   </div>
 </div>
 
-<div class="container">
-    <h2>GENERATOR ANGKA ACAK</h2>
-    <div id="number-display">----</div>
-    
-    <button onclick="generateNumber()">Klik untuk Generate</button>
 
-    <div class="history-section">
-        <div class="history-title">
-            <span>RIWAYAT</span>
-            <span id="counter-text">Total: 0</span>
-        </div>
-        <div id="history-list"></div>
-    </div>
+<div id="clock-bar">
+  <div id="clock-time">00:00:00</div>
+  <div id="clock-date">MON, 12 MAY 2026</div>
+  <div id="clock-paused">SYSTEM STALLED</div>
 </div>
+
+<button id="refresh-btn" onclick="location.reload()">
+  <svg viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+</button>
+
+<div id="results-overlay">
+  <div class="result-card">
+    <div class="rc-header">
+      <div style="font-size: 0.6rem; letter-spacing: 0.3em; margin-bottom: 5px; opacity: 0.7;">EXTRACTION COMPLETE</div>
+      <div class="rc-title" id="rc-title-text">NUMBER HUNTER</div>
+      <div style="margin-top: 15px; font-family: 'Share Tech Mono'; font-size: 0.8rem;">
+        ANCHOR TARGET: <span class="rc-anchor-num" id="rc-anchor-num">00</span>
+      </div>
+    </div>
+    <div class="rc-body">
+      <div class="rc-grid" id="rcGrid"></div>
+      <div id="rc-timestamp" style="font-size: 0.6rem; color: #999; margin-top: 20px; font-family: 'Share Tech Mono';"></div>
+    </div>
+    <div class="rc-footer">
+      <button class="rc-copy-btn" id="rcCopyBtn" onclick="copyResults()">COPY DATA LOG</button>
+      <button class="rc-close-btn" onclick="closeResults()">TERMINATE SESSION</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="title">
+    <h1 id="mainTitle" contenteditable="true" spellcheck="false">HUNTER GEN</h1>
+    <p>Anchor-Point Digital Extraction</p>
+  </div>
+
+  <div class="input-box" id="inputBox">
+    <label>SET TARGET ANCHOR (00 – 99)</label>
+    <input type="number" id="anchorInput" class="anchor-input" placeholder="--" min="0" max="99"/>
+    <button class="start-btn" onclick="startAnchorMode()">INITIALIZE HUNTER</button>
+  </div>
+
+  <div class="generator" id="generator">
+    <div class="card" id="card">
+      <div class="card-label">Locked Signal</div>
+      <div class="number" id="number">00</div>
+    </div>
+    <div class="info" id="info">Waiting for command...</div>
+    
+    <div class="formula-box">
+      <div class="formula-container" id="formulaContainer"></div>
+    </div>
+
+    <button class="gen-btn" id="genBtn" onclick="manualGenerate()">EXTRACT NEXT SIGNAL</button>
+    <div id="counter" style="font-family: 'Share Tech Mono'; font-size: 0.75rem; color: #999;">REMAINING SLOTS: 10</div>
+  </div>
+</div>
+
 <script>
-window.addEventListener("load", () => {
-    const splash = document.getElementById("splash");
-    const text = document.getElementById("rng-text");
+// Logic remains identical to your core functionality, but with UI triggers updated.
 
-    // Step 1: tunggu logo muncul dulu
-    setTimeout(() => {
-        text.classList.add("show");
-    }, 700);
+const titleEl = document.getElementById('mainTitle');
+titleEl.addEventListener('blur', () => { if(!titleEl.textContent.trim()) titleEl.textContent = 'HUNTER GEN'; });
 
-    // Step 2: hilangkan splash
-    setTimeout(() => {
-        splash.style.opacity = "0";
-        splash.style.transition = "opacity 0.5s ease";
+let clockPaused = false;
+const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
-        setTimeout(() => {
-            splash.style.display = "none";
-        }, 500);
-    }, 2000);
-});
+function updateClock(){
+  if(clockPaused) return;
+  const now=new Date();
+  document.getElementById('clock-time').textContent=now.toTimeString().split(' ')[0];
+  document.getElementById('clock-date').textContent=`${DAYS[now.getDay()]} ${String(now.getDate()).padStart(2,'0')} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+}
+setInterval(updateClock,1000); updateClock();
 
+const FORMULAS=['SCANNING_LATENCY...','SIGNAL_ENCRYPTION_404','TRACING_ORIGIN_POINT','HASH_RECOVERY_INIT','DECRYPTING_VECTORS...','TARGET_LOCK_ON_COORD','GRID_SECTOR_7_STABLE'];
+let formulaInterval=null;
 
-window.addEventListener("load", () => {
-    const splash = document.getElementById("splash");
-
-    // Fade out splash
-    setTimeout(() => {
-        splash.style.opacity = "0";
-        splash.style.transition = "opacity 0.5s ease";
-        
-        setTimeout(() => {
-            splash.style.display = "none";
-        }, 500);
-    }, 800);
-});
-
-let count = 0;
-
-// 🔥 PERFECT RANDOM (NO BIAS)
-function generateFairRandom(max) {
-    const array = new Uint32Array(1);
-    const maxUint32 = 0xFFFFFFFF;
-    const limit = maxUint32 - (maxUint32 % max);
-
-    let rand;
-    do {
-        window.crypto.getRandomValues(array);
-        rand = array[0];
-    } while (rand >= limit);
-
-    return (rand % max) + 1;
+function addFormulaLine(){
+  const c=document.getElementById('formulaContainer');
+  const l=document.createElement('div'); l.className='formula-line active';
+  l.textContent=`> ${FORMULAS[Math.floor(Math.random()*FORMULAS.length)]} [${Math.random().toString(16).slice(2,6)}]`;
+  c.prepend(l); while(c.children.length>4) c.removeChild(c.lastChild);
 }
 
-function generateNumber() {
-    const randomNumber = generateFairRandom(9999);
-    const display = document.getElementById('number-display');
+let anchorNumber=null, rolling=false, manualCount=0;
+const maxManual=10, resultLog=[];
 
-    let iterations = 0;
-    const interval = setInterval(() => {
-        display.innerText = Math.floor(Math.random() * 9999) + 1;
-        iterations++;
-
-        if (iterations > 12) {
-            clearInterval(interval);
-            display.innerText = randomNumber;
-            addToHistory(randomNumber);
-        }
-    }, 30);
+function cryptoRandom(min,max){
+  const range=max-min+1;
+  const arr=new Uint8Array(1);
+  window.crypto.getRandomValues(arr);
+  return min + (arr[0] % range);
 }
 
-function addToHistory(num) {
-    count++;
-    const historyList = document.getElementById('history-list');
-    const counterText = document.getElementById('counter-text');
-
-    const item = document.createElement('div');
-    item.className = 'history-item';
-    item.innerText = num;
-
-    historyList.insertBefore(item, historyList.firstChild);
-    counterText.innerText = `Total: ${count}`;
+function startAnchorMode(){
+  const inp=document.getElementById('anchorInput').value;
+  if(inp==='' || inp < 0 || inp > 99){ alert('INVALID COORDINATES (00-99)'); return; }
+  anchorNumber=parseInt(inp);
+  document.getElementById('inputBox').style.display='none';
+  document.getElementById('generator').style.display='flex';
+  autoGenerateUntilAnchor();
 }
 
-// 🔥 REGISTER SERVICE WORKER (LEBIH AMAN)
+function autoGenerateUntilAnchor(){
+  rolling=true; clockPaused=true;
+  document.getElementById('clock-paused').style.display='block';
+  formulaInterval = setInterval(addFormulaLine, 150);
+  
+  const card=document.getElementById('card');
+  const numEl=document.getElementById('number');
+  const info=document.getElementById('info');
+  card.classList.add('rolling');
+  
+  const iv=setInterval(()=>{
+    const n=cryptoRandom(0,99);
+    numEl.textContent=String(n).padStart(2,'0');
+    if(n===anchorNumber){
+      clearInterval(iv); clearInterval(formulaInterval);
+      card.classList.remove('rolling'); rolling=false;
+      info.innerHTML=`ANCHOR LOCKED AT <b>${String(anchorNumber).padStart(2,'0')}</b>`;
+    }
+  },50);
+}
+
+function manualGenerate(){
+  if(rolling||manualCount>=maxManual)return;
+  rolling=true;
+  const card=document.getElementById('card');
+  const numEl=document.getElementById('number');
+  const info=document.getElementById('info');
+  const btn=document.getElementById('genBtn');
+  card.classList.add('rolling');
+  
+  let dur=0;
+  const tk=setInterval(()=>{
+    numEl.textContent=String(cryptoRandom(0,99)).padStart(2,'0');
+    dur+=50;
+    if(dur>=800){
+      clearInterval(tk);
+      const final=cryptoRandom(0,99);
+      numEl.textContent=String(final).padStart(2,'0');
+      card.classList.remove('rolling');
+      manualCount++; resultLog.push(final);
+      document.getElementById('counter').textContent=`REMAINING SLOTS: ${maxManual-manualCount}`;
+      info.innerHTML=`SIGNAL #${manualCount} CAPTURED: <b>${String(final).padStart(2,'0')}</b>`;
+      rolling=false;
+      if(manualCount>=maxManual){ btn.disabled=true; setTimeout(showResultsPopup,800); }
+    }
+  },50);
+}
+
+function showResultsPopup(){
+  document.getElementById('rc-title-text').textContent = titleEl.textContent;
+  document.getElementById('rc-anchor-num').textContent = String(anchorNumber).padStart(2,'0');
+  document.getElementById('rc-timestamp').textContent = 'TIMESTAMP: ' + new Date().toLocaleString();
+  
+  const grid=document.getElementById('rcGrid'); grid.innerHTML='';
+  resultLog.forEach((num,i)=>{
+    grid.innerHTML += `<div class="rc-num-cell"><span class="rc-num-order">#${i+1}</span><span class="rc-num-val">${String(num).padStart(2,'0')}</span></div>`;
+  });
+  document.getElementById('results-overlay').classList.add('show');
+}
+
+function closeResults(){ location.reload(); }
+
+function copyResults(){
+  let txt=`-- ${titleEl.textContent} LOG --\nANCHOR: ${anchorNumber}\n\n`;
+  resultLog.forEach((n,i)=> txt+=`[SIGNAL ${i+1}]: ${String(n).padStart(2,'0')}\n`);
+  navigator.clipboard.writeText(txt).then(()=> {
+    const b = document.getElementById('rcCopyBtn');
+    b.textContent = 'DATA COPIED!';
+    setTimeout(()=> b.textContent = 'COPY DATA LOG', 2000);
+  });
+}
+// REGISTER SERVICE WORKER
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-        .then(() => {
-            console.log('Service Worker berhasil terdaftar');
-        })
-        .catch(err => {
-            console.log('Service Worker gagal:', err);
-        });
-    });
+  navigator.serviceWorker.register('./sw.js')
+    .then(() => console.log("System Secured: Service Worker Active"))
+    .catch(err => console.log("Breach Detected: SW Failed", err));
 }
+
+// BOOT SEQUENCE LOGIC
+window.addEventListener('load', () => {
+  const progress = document.querySelector('.boot-progress');
+  const status = document.getElementById('boot-status');
+  const overlay = document.getElementById('boot-sequence');
+  
+  let width = 0;
+  const messages = ["ACCESSING SATELLITE...", "DECRYPTING NODE...", "TARGET ACQUIRED", "READY TO HUNT"];
+  
+  const interval = setInterval(() => {
+    width += Math.random() * 15;
+    if (width >= 100) {
+      width = 100;
+      clearInterval(interval);
+      status.textContent = messages[3];
+      setTimeout(() => {
+        overlay.classList.add('boot-fade-out');
+        setTimeout(() => overlay.style.display = 'none', 600);
+      }, 500);
+    } else {
+      progress.style.width = width + '%';
+      status.textContent = messages[Math.floor(width/30)] || messages[2];
+    }
+  }, 150);
+});
+
 </script>
 </body>
 </html>
